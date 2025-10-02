@@ -119,9 +119,55 @@ export const useCallsStore = defineStore('calls', () => {
     isCallVisible.value = false
   }
 
-  const setCallReminder = (callData) => {
+  // Helper function to generate an AES-GCM key (for demo purposes; in practice, store/load securely)
+  async function getCryptoKey() {
+    const password = 'change_this_password_to_something_secret'
+    const enc = new TextEncoder()
+    const keyMaterial = await window.crypto.subtle.importKey(
+      'raw',
+      enc.encode(password),
+      'PBKDF2',
+      false,
+      ['deriveKey']
+    )
+    return window.crypto.subtle.deriveKey(
+      {
+        name: 'PBKDF2',
+        salt: enc.encode('callsStoreSalt'),
+        iterations: 100000,
+        hash: 'SHA-256'
+      },
+      keyMaterial,
+      { name: 'AES-GCM', length: 256 },
+      false,
+      ['encrypt', 'decrypt']
+    )
+  }
+
+  // Encrypt text using AES-GCM. Returns base64 string.
+  async function encryptText(plainText) {
+    const key = await getCryptoKey()
+    const iv = window.crypto.getRandomValues(new Uint8Array(12))
+    const enc = new TextEncoder()
+    const ciphertext = await window.crypto.subtle.encrypt(
+      { name: 'AES-GCM', iv },
+      key,
+      enc.encode(plainText)
+    )
+    // Store IV + cipher in one string, base64
+    const ivCipher = new Uint8Array(iv.length + ciphertext.byteLength)
+    ivCipher.set(iv, 0)
+    ivCipher.set(new Uint8Array(ciphertext), iv.length)
+    // Convert to base64
+    return btoa(String.fromCharCode.apply(null, ivCipher))
+  }
+
+  const setCallReminder = async (callData) => {
     // Here you would integrate with reminder/notification system
     console.log('Setting reminder for call:', callData)
+
+    // Encrypt the phone number before storage
+    const encryptedPhoneNumber = await encryptText(callData.phoneNumber || "")
 
     // Example: Create a reminder for later
     const reminderData = {
@@ -129,7 +175,7 @@ export const useCallsStore = defineStore('calls', () => {
       type: 'call_reminder',
       contactId: callData.contactId,
       contactName: callData.name,
-      phoneNumber: callData.phoneNumber,
+      phoneNumber: encryptedPhoneNumber,
       scheduledTime: new Date(Date.now() + 5 * 60 * 1000), // 5 minutes later
       status: 'pending'
     }
