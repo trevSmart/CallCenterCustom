@@ -104,7 +104,7 @@ export default {
 .ninja-sidebar {
   width: 280px;
   height: 100vh;
-  background: linear-gradient(135deg, #0f172a 0%, #1e40af 25%, #3b82f6 50%, #1e40af 75%, #0f172a 100%);
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
   position: fixed;
   left: 0;
   top: 0;
@@ -124,8 +124,8 @@ export default {
   right: 0;
   bottom: 0;
   background:
-    radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.03) 0%, transparent 70%),
-    radial-gradient(circle at 80% 80%, rgba(30, 64, 175, 0.05) 0%, transparent 70%);
+    radial-gradient(circle at 20% 50%, rgba(148, 163, 184, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 80% 80%, rgba(100, 116, 139, 0.06) 0%, transparent 60%);
   z-index: 1;
 }
 
@@ -151,7 +151,7 @@ export default {
 
 .logo-text {
   color: white;
-  font-weight: 700;
+  font-weight: 200;
   font-size: 20px;
   letter-spacing: 0.5px;
 }

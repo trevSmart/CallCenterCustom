@@ -39,6 +39,14 @@
       <div class="chat-interface">
         <ChatList @openChat="handleOpenChat" />
 
+        <!-- Overlay for phone widget outside click -->
+        <div
+          v-if="showOverlayForPhone"
+          class="widget-overlay"
+          @click="handlePhoneOverlayClick"
+        >
+        </div>
+
         <!-- Phone Dialer Widget (Floating) -->
         <div
           v-if="showPhoneWidget"
@@ -51,17 +59,27 @@
           }"
           @mousedown="startPhoneWidgetDrag"
           @touchstart="startPhoneWidgetDrag"
+          @click="disablePhoneWidgetCloseOnOutside"
+          @mouseenter="enablePhoneWidgetCloseOnOutside"
         >
           <div class="widget-header">
             <div class="drag-indicator">
               <font-awesome-icon icon="grip-vertical" />
             </div>
-            <h3 class="phone-title">
+            <h3 class="phone-title" @dblclick="closePhoneWidget">
               <font-awesome-icon icon="phone" /> Phone Dialer
             </h3>
             <div class="widget-controls">
-              <button class="minimize-icon" @click-stop="closePhoneWidget">
-                <font-awesome-icon icon="minimize" />
+              <button
+                class="close-mode-btn"
+                @click.stop="toggleCloseMode"
+                :class="{ active: showOverlayForPhone }"
+                title="Enable click outside to close"
+              >
+                <font-awesome-icon :icon="['fas', 'external-link-alt']" />
+              </button>
+              <button class="close-icon" @click.stop="closePhoneWidget">
+                <font-awesome-icon :icon="['fas', 'times']" />
               </button>
             </div>
           </div>
@@ -115,7 +133,7 @@
                 <router-link to="/dashboard" class="view-all-link">
                   <font-awesome-icon icon="external-link-alt" />
                 </router-link>
-                <button class="close-btn" @click.stop="closeStatsWidget"><font-awesome-icon icon="xmark" /></button>
+                <button class="close-btn" @click.stop="closeStatsWidget"><font-awesome-icon icon="times" /></button>
               </div>
             </div>
             <div class="stats-grid">
@@ -330,6 +348,30 @@ export default {
       showPhoneWidget.value = false
     }
 
+    // Add click outside functionality
+    const showOverlayForPhone = ref(false)
+
+    const enablePhoneWidgetCloseOnOutside = () => {
+      if (showPhoneWidget.value) {
+        showOverlayForPhone.value = true
+      }
+    }
+
+    const disablePhoneWidgetCloseOnOutside = () => {
+      showOverlayForPhone.value = false
+    }
+
+    const handlePhoneOverlayClick = () => {
+      if (showOverlayForPhone.value) {
+        closePhoneWidget()
+        showOverlayForPhone.value = false
+      }
+    }
+
+    const toggleCloseMode = () => {
+      showOverlayForPhone.value = !showOverlayForPhone.value
+    }
+
     // Handle image loading errors
     const handleImageError = (event) => {
       event.target.style.display = 'none'
@@ -409,7 +451,12 @@ export default {
       startStatsDrag,
       handleImageError,
       handleDialerCall,
-      handleContactSelected
+      handleContactSelected,
+      showOverlayForPhone,
+      enablePhoneWidgetCloseOnOutside,
+      disablePhoneWidgetCloseOnOutside,
+      handlePhoneOverlayClick,
+      toggleCloseMode
     }
   }
 }
@@ -421,29 +468,50 @@ export default {
   min-height: 100vh;
   background: #f9fafb;
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  top: 0;
+}
+
+.widget-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 9997;
+  cursor: pointer;
 }
 
 .main-content {
   flex: 1;
   background: white;
   min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  position: relative;
 }
 
 .main-header {
   background: white;
-  padding: 32px 40px;
+  padding: 16px 24px;
   border-bottom: 1px solid #e5e7eb;
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.02);
+  margin-top: 0;
+  margin-bottom: 0;
+  width: 100%;
 }
 
 .header-title {
   margin: 0;
   color: #1f2937;
   font-weight: 600;
-  font-size: 24px;
+  font-size: 20px;
 }
 
 .header-actions {
@@ -534,7 +602,7 @@ export default {
 
 .chat-interface {
   position: relative;
-  height: calc(100vh - 88px);
+  height: calc(100vh - 64px);
 }
 
 .draggable-widget {
@@ -909,6 +977,19 @@ export default {
   font-weight: 600;
   font-size: 16px;
   flex: 1;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.phone-dialer-card .phone-title:hover {
+  content: "Double-click to close";
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.phone-dialer-card .phone-title:active {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 /* Stats Widget Header Styles */
@@ -993,6 +1074,59 @@ export default {
   background: rgba(239, 68, 68, 0.3);
   color: white;
   border-color: rgba(239, 68, 68, 0.4);
+}
+
+.draggable-widget .close-icon {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-size: 12px;
+}
+
+.draggable-widget .close-icon:hover {
+  background: rgba(239, 68, 68, 0.3);
+  color: white;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.draggable-widget .close-mode-btn {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-size: 12px;
+}
+
+.draggable-widget .close-mode-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.draggable-widget .close-mode-btn.active {
+  background: rgba(34, 197, 94, 0.3);
+  color: white;
+  border-color: rgba(34, 197, 94, 0.4);
+}
+
+.draggable-widget .close-mode-btn.active:hover {
+  background: rgba(34, 197, 94, 0.4);
 }
 
 /* Theme Toggle Button */

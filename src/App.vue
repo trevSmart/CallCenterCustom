@@ -122,11 +122,14 @@ export default {
 
 .with-sidebar {
   margin-left: 280px; /* Anchura de la sidebar */
+  width: calc(100vw - 280px); /* Ocupar el espai restant */
+  min-height: 100vh;
 }
 
 @media (max-width: 768px) {
   .with-sidebar {
     margin-left: 0; /* En mòbils, la sidebar es sobreposa */
+    width: 100vw; /* En mòbils ocupa tota l'ample */
   }
 }
 

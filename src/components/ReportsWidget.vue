@@ -16,7 +16,7 @@
         <router-link to="/reports" class="view-all-link" @click.stop>
           <font-awesome-icon icon="external-link-alt" />
         </router-link>
-        <button class="close-btn" @click.stop="closeWidget"><font-awesome-icon icon="xmark" /></button>
+        <button class="close-btn" @click.stop="closeWidget"><font-awesome-icon icon="times" /></button>
       </div>
     </div>
 

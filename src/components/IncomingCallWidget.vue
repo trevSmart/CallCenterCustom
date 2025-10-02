@@ -372,8 +372,8 @@ export default {
 }
 
 .profile-picture {
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   overflow: hidden;
   margin-bottom: 20px;
@@ -388,10 +388,10 @@ export default {
 }
 
 .caller-name {
-  font-size: 32px;
+  font-size: 33px;
   font-weight: 700;
   margin-bottom: 8px;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
 }
 
 .call-status {
@@ -545,12 +545,12 @@ export default {
   }
 
   .caller-name {
-    font-size: 28px;
+    font-size: 29px;
   }
 
   .profile-picture {
-    width: 100px;
-    height: 100px;
+    width: 85px;
+    height: 85px;
   }
 
   .btn-icon {

@@ -75,7 +75,8 @@ import {
   faDeleteLeft,
   faMinimize,
   faMoon,
-  faSun
+  faSun,
+  faTimes
 } from '@fortawesome/free-solid-svg-icons'
 
 // Regular icons
@@ -154,6 +155,7 @@ library.add(
   faMinimize,
   faMoon,
   faSun,
+  faTimes,
   faEnvelopeRegular,
   faUserCircleRegular,
   faCalendarAltRegular,

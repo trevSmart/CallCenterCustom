@@ -21,7 +21,7 @@
       <h3 class="widget-title"><font-awesome-icon icon="comments" /> Live Chat</h3>
       <div class="widget-controls" @click.stop @mousedown.stop @touchstart.stop>
         <button class="control-btn" @click.stop><font-awesome-icon icon="phone" /></button>
-        <button class="control-btn close-btn" @click.stop="closeWidget"><font-awesome-icon icon="xmark" /></button>
+        <button class="control-btn close-btn" @click.stop="closeWidget"><font-awesome-icon icon="times" /></button>
         <button class="control-btn" @click.stop><font-awesome-icon icon="ellipsis-vertical" /></button>
       </div>
     </div>
