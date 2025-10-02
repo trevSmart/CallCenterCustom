@@ -4,7 +4,7 @@
   "description": "Call Center Bancari Application",
   "main": "src/main.js",
   "scripts": {
-    "dev": "vite --mode background",
+    "dev": "pkill -f 'vite' || true && vite --mode background",
     "build": "vite build",
     "preview": "vite preview"
   },

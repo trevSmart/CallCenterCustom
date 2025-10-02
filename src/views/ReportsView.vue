@@ -291,9 +291,9 @@ export default {
     const callsData = computed(() => [45, 52, 48, 61, 55, 67, 72, 68, 74, 81, 76, 69])
     const pipelineData = computed(() => [
       { stage: 'Prospecting', amount: 45000, count: 12, percentage: 75, color: '#f59e0b' },
-      { stage: 'Qualification', amount: 23000, count: 8, percentage: 65, color: '#3b82f6' },
+      { stage: 'Qualification', amount: 23000, count: 8, percentage: 65, color: '#22d3ee' },
       { stage: 'Proposal', amount: 89000, count: 18, percentage: 45, color: '#8b5cf6' },
-      { stage: 'Closed Won', amount: 77087, count: 15, percentage: 85, color: '#10b981' }
+      { stage: 'Closed Won', amount: 77087, count: 15, percentage: 85, color: '#3b82f6' }
     ])
 
     const agentPerformance = computed(() => [
@@ -459,7 +459,6 @@ export default {
 <style scoped>
 .reports-view {
   padding: 32px 40px;
-  margin-left: 280px;
   min-height: 100vh;
   background-color: #f8fafc;
 }
@@ -528,7 +527,7 @@ export default {
 
 .export-btn {
   padding: 10px 16px;
-  background: #10b981;
+  background: #3b82f6;
   color: white;
   border: none;
   border-radius: 6px;
@@ -542,7 +541,7 @@ export default {
 }
 
 .export-btn:hover {
-  background: #059669;
+  background: #1e40af;
 }
 
 .overview-section {
@@ -566,7 +565,7 @@ export default {
 .card-icon {
   width: 60px;
   height: 60px;
-  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, #0e7490 0%, #22d3ee 100%);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -598,7 +597,7 @@ export default {
 }
 
 .card-change.positive {
-  color: #10b981;
+  color: #3b82f6;
 }
 
 .card-change.negative {
@@ -672,7 +671,7 @@ export default {
 }
 
 .bar-fill {
-  background: linear-gradient(to top, #1e40af, #3b82f6);
+  background: linear-gradient(to top, #0e7490, #22d3ee);
   border-radius: 4px 4px 0 0;
   min-height: 4px;
   width: 100%;
@@ -762,7 +761,7 @@ export default {
 .agent-rank {
   width: 24px;
   height: 24px;
-  background: #1e40af;
+  background: #0e7490;
   color: white;
   border-radius: 50%;
   display: flex;
@@ -775,7 +774,7 @@ export default {
 .agent-avatar {
   width: 32px;
   height: 32px;
-  background: linear-gradient(135deg, #1e40af, #3b82f6);
+  background: linear-gradient(135deg, #0e7490, #22d3ee);
   color: white;
   border-radius: 50%;
   display: flex;
@@ -800,7 +799,7 @@ export default {
 
 .agent-score {
   padding: 4px 8px;
-  background: #10b981;
+  background: #3b82f6;
   color: white;
   border-radius: 4px;
   font-size: 12px;
@@ -823,7 +822,7 @@ export default {
   position: absolute;
   width: 8px;
   height: 8px;
-  background: #10b981;
+  background: #3b82f6;
   border-radius: 50%;
   transform: translate(-50%, 50%);
 }
@@ -923,7 +922,7 @@ export default {
 .agent-avatar-small {
   width: 24px;
   height: 24px;
-  background: linear-gradient(135deg, #1e40af, #3b82f6);
+  background: linear-gradient(135deg, #0e7490, #22d3ee);
   color: white;
   border-radius: 50%;
   display: flex;
@@ -954,7 +953,7 @@ export default {
 
 .conversion-fill {
   height: 100%;
-  background: linear-gradient(90deg, #10b981, #059669);
+  background: linear-gradient(90deg, #0f172a 0%, #1e40af 25%, #3b82f6 50%, #1e40af 75%, #0f172a 100%);
   border-radius: 8px;
   transition: width 0.3s ease;
 }
@@ -971,7 +970,7 @@ export default {
 
 .revenue-cell {
   font-weight: 600;
-  color: #10b981;
+  color: #3b82f6;
 }
 
 .satisfaction-rating {
@@ -983,7 +982,7 @@ export default {
 }
 
 .satisfaction-rating.excellent {
-  background: #10b981;
+  background: #3b82f6;
   color: white;
 }
 

@@ -33,32 +33,38 @@ export const generateBankingData = () => {
   const contacts = [
     {
       id: 1,
-      firstName: 'Joan',
-      lastName: 'Rodriguez',
-      email: 'joan.rodriguez@caixabank.es',
-      phone: '666777888',
+      firstName: 'Carolyn',
+      lastName: 'Statingham',
+      name: 'Carolyn Statingham',
+      email: 'carolyn.statingham@caixabank.es',
+      phone: '1111222444',
       position: 'Director Comercial',
       accountId: 1,
+      profileImage: 'https://images.unsplash.com/photo-1494790108755-2616b612b47c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
       createdAt: '2023-01-16'
     },
     {
       id: 2,
-      firstName: 'Maria',
-      lastName: 'Garcia',
-      email: 'maria.garcia@bbva.com',
-      phone: '666111222',
+      firstName: 'Joseph',
+      lastName: 'Tristam',
+      name: 'Joseph Tristam',
+      email: 'joseph.tristam@bbva.com',
+      phone: '2222333333',
       position: 'Responsable Recursos Humanos',
       accountId: 2,
+      profileImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
       createdAt: '2023-02-21'
     },
     {
       id: 3,
-      firstName: 'Carlos',
-      lastName: 'Fernandez',
-      email: 'carlos.fernandez@santander.es',
-      phone: '666333444',
+      firstName: 'Maria',
+      lastName: 'Santos',
+      name: 'Maria Santos',
+      email: 'maria.santos@santander.es',
+      phone: '3333444555',
       position: 'Director Financer',
       accountId: 3,
+      profileImage: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
       createdAt: '2023-03-11'
     }
   ]

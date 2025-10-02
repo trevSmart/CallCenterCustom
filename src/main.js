@@ -69,7 +69,13 @@ import {
   faDownload,
   faCalendarCheck,
   faExternalLinkAlt,
-  faGripVertical
+  faGripVertical,
+  faHistory,
+  faThLarge,
+  faDeleteLeft,
+  faMinimize,
+  faMoon,
+  faSun
 } from '@fortawesome/free-solid-svg-icons'
 
 // Regular icons
@@ -142,6 +148,12 @@ library.add(
   faCalendarCheck,
   faExternalLinkAlt,
   faGripVertical,
+  faHistory,
+  faThLarge,
+  faDeleteLeft,
+  faMinimize,
+  faMoon,
+  faSun,
   faEnvelopeRegular,
   faUserCircleRegular,
   faCalendarAltRegular,

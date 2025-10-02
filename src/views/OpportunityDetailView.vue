@@ -357,7 +357,6 @@ export default {
 
 <style scoped>
 .opportunity-detail-view {
-  margin-left: 280px;
   padding: 32px 40px;
   min-height: 100vh;
   background-color: #f8fafc;
@@ -430,12 +429,12 @@ export default {
     }
 
     .edit-btn {
-      background: #3b82f6;
+      background: #22d3ee;
       color: white;
     }
 
     .edit-btn:hover {
-      background: #2563eb;
+      background: #0891b2;
     }
 
     .opportunities-btn {
@@ -523,12 +522,12 @@ export default {
 
     .stage-badge.proposal, .stage-badge.negotiation {
       background: rgba(59, 130, 246, 0.1);
-      color: #1e40af;
+      color: #0e7490;
     }
 
     .stage-badge.closed-won {
       background: rgba(16, 185, 129, 0.1);
-      color: #065f46;
+      color: #1e40af;
     }
 
     .stage-badge.closed-lost {
@@ -604,7 +603,7 @@ export default {
 
     .progress-fill {
       height: 100%;
-      background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+      background: linear-gradient(90deg, #0f172a 0%, #1e40af 25%, #3b82f6 50%, #1e40af 75%, #0f172a 100%);
       transition: width 0.3s ease;
     }
 
@@ -669,7 +668,7 @@ export default {
     }
 
     .save-btn {
-      background: #10b981;
+      background: #3b82f6;
       color: white;
     }
 
@@ -678,7 +677,7 @@ export default {
     }
 
     .save-btn:hover {
-      background: #059669;
+      background: #1e40af;
     }
 
     .related-section {
@@ -742,7 +741,7 @@ export default {
       align-items: center;
       gap: 6px;
       padding: 6px 12px;
-      background: #3b82f6;
+      background: #22d3ee;
       color: white;
       border-radius: 4px;
       text-decoration: none;
@@ -753,7 +752,7 @@ export default {
     }
 
     .view-link:hover {
-      background: #2563eb;
+      background: #0891b2;
     }
 
     .timeline-section {
@@ -785,7 +784,7 @@ export default {
     .timeline-marker {
       width: 12px;
       height: 12px;
-      background: #10b981;
+      background: #3b82f6;
       border-radius: 50%;
       flex-shrink: 0;
       margin-top: 4px;
@@ -822,7 +821,7 @@ export default {
 
     .activity-amount {
       font-weight: 600;
-      color: #10b981;
+      color: #3b82f6;
       margin-bottom: 4px;
     }
 

@@ -2,7 +2,7 @@
   <div class="chat-list">
     <!-- Header Section -->
     <div class="chat-header">
-      <h1 class="chat-title">NinjaChat</h1>
+      <h1 class="chat-title">Veolia</h1>
       <p class="chat-subtitle">Be present when users are checking out your business</p>
 
       <div class="agent-section">
@@ -54,7 +54,13 @@
           >
             <td>
               <div class="customer-info">
-                <div class="avatar">{{ chat.customer.name.charAt(0) }}</div>
+                <img
+                  :src="getCustomerAvatar(chat.customer)"
+                  :alt="chat.customer.name"
+                  class="customer-avatar-img"
+                  @error="setCustomerFallbackAvatar"
+                />
+                <div class="avatar-fallback">{{ chat.customer.name.charAt(0) }}</div>
                 <span>{{ chat.customer.name }}</span>
               </div>
             </td>
@@ -174,12 +180,34 @@ export default {
       }
     }
 
+    // Customer avatar methods
+    const customerAvatars = {
+      'Janet Howard': '/images/customer-janet.jpg',
+      'Anthony Little': '/images/customer-anthony.jpg',
+      'Sarah Graham': '/images/customer-sarah.jpg',
+      'Robert Smith': '/images/customer-robert.jpg',
+      'Emily Jones': '/images/customer-emily.jpg'
+    }
+
+    const getCustomerAvatar = (customer) => {
+      return customerAvatars[customer.name] || '/images/customer-default.jpg'
+    }
+
+    const setCustomerFallbackAvatar = (event) => {
+      const img = event.target
+      const fallback = img.nextElementSibling
+      img.style.display = 'none'
+      fallback.style.display = 'flex'
+    }
+
     return {
       searchQuery,
       chats,
       filteredChats,
       openChat,
-      formatTime
+      formatTime,
+      getCustomerAvatar,
+      setCustomerFallbackAvatar
     }
   }
 }
@@ -219,7 +247,7 @@ export default {
 }
 
 .agent-btn {
-  background: #3b82f6;
+  background: #22d3ee;
   color: white;
   border: none;
   border-radius: 8px;
@@ -231,7 +259,7 @@ export default {
 }
 
 .agent-btn:hover {
-  background: #2563eb;
+  background: #0891b2;
 }
 
 .add-department-btn {
@@ -274,8 +302,8 @@ export default {
 }
 
 .tab-nav.active {
-  color: #3b82f6;
-  border-bottom-color: #3b82f6;
+  color: #22d3ee;
+  border-bottom-color: #22d3ee;
 }
 
 .search-section {
@@ -354,19 +382,31 @@ export default {
   display: flex;
   align-items: center;
   gap: 12px;
+  position: relative;
 }
 
-.avatar {
+.customer-avatar-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.avatar-fallback {
   width: 32px;
   height: 32px;
   border-radius: 50%;
   background: #6366f1;
   color: white;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   font-weight: 600;
   font-size: 14px;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .message-preview {

@@ -3,12 +3,8 @@
     <!-- Logo Section -->
     <div class="sidebar-header">
       <div class="logo-container">
-        <div class="logo-icon">∞</div>
-        <div class="logo-text">500 apps</div>
-      </div>
-      <div class="app-tabs">
-        <button class="tab-btn active">All Apps</button>
-        <button class="tab-btn">My Apps</button>
+        <img src="/images/logo.png" alt="Logo" class="logo-image" />
+        <div class="logo-text">XaviBank CRM</div>
       </div>
     </div>
 
@@ -74,27 +70,7 @@
             <font-awesome-icon icon="address-book" /> Cases
           </router-link>
           <router-link to="/dashboard" class="submenu-item active">
-            <font-awesome-icon icon="comments" /> Ninjachat
-          </router-link>
-        </div>
-      </div>
-
-      <!-- Banking Operations -->
-      <div class="nav-section expanded">
-        <div class="nav-section-header">
-          <div class="nav-icon"><font-awesome-icon icon="university" /></div>
-          <span>Banking</span>
-          <div class="expand-icon"><font-awesome-icon icon="chevron-down" /></div>
-        </div>
-        <div class="nav-submenu">
-          <router-link to="/credit-reviews" class="submenu-item">
-            <font-awesome-icon icon="search-dollar" /> Valoracions Crèdit
-          </router-link>
-          <router-link to="/banking-products" class="submenu-item">
-            <font-awesome-icon icon="piggy-bank" /> Productes Bancaris
-          </router-link>
-          <router-link to="/accounts-banking" class="submenu-item">
-            <font-awesome-icon icon="wallet" /> Accounts Bancaris
+            <font-awesome-icon icon="comments" /> Veolia Chat
           </router-link>
         </div>
       </div>
@@ -115,17 +91,6 @@
         </router-link>
       </div>
     </nav>
-
-    <!-- User Section -->
-    <div class="sidebar-footer">
-      <div class="user-controls">
-        <button class="control-btn"><font-awesome-icon icon="edit" /></button>
-        <div class="user-avatar">
-            <font-awesome-icon icon="user-circle" />
-        </div>
-        <button class="control-btn"><font-awesome-icon icon="gear" /></button>
-      </div>
-    </div>
   </aside>
 </template>
 
@@ -139,7 +104,7 @@ export default {
 .ninja-sidebar {
   width: 280px;
   height: 100vh;
-  background: linear-gradient(180deg, #1e40af 0%, #0f172a 100%);
+  background: linear-gradient(135deg, #0f172a 0%, #1e40af 25%, #3b82f6 50%, #1e40af 75%, #0f172a 100%);
   position: fixed;
   left: 0;
   top: 0;
@@ -147,37 +112,48 @@ export default {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.ninja-sidebar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.03) 0%, transparent 70%),
+    radial-gradient(circle at 80% 80%, rgba(30, 64, 175, 0.05) 0%, transparent 70%);
+  z-index: 1;
 }
 
 .sidebar-header {
-  padding: 24px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 32px 20px;
+  position: relative;
+  z-index: 2;
 }
 
 .logo-container {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
-.logo-icon {
-  width: 32px;
-  height: 32px;
-  background: white;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  color: #1e40af;
-  font-size: 18px;
+.logo-image {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  border-radius: 12px;
 }
 
 .logo-text {
   color: white;
-  font-weight: 600;
-  font-size: 14px;
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: 0.5px;
 }
 
 .app-tabs {
@@ -202,7 +178,7 @@ export default {
 
 .tab-btn.active {
   background: white;
-  color: #1e40af;
+  color: #0e7490;
 }
 
 .tab-btn:hover:not(.active) {
@@ -212,6 +188,8 @@ export default {
 .sidebar-nav {
   flex: 1;
   padding: 20px;
+  position: relative;
+  z-index: 2;
 }
 
 .nav-section {
@@ -232,10 +210,25 @@ export default {
 
   transition: all 0.2s ease;
   position: relative;
+  text-decoration: none;
 }
 
 .nav-section-header:hover {
   background: rgba(255, 255, 255, 0.1);
+  text-decoration: none;
+}
+
+.nav-section-header:active,
+.nav-section-header:focus {
+  background: rgba(255, 255, 255, 0.1);
+  text-decoration: none;
+  outline: none;
+}
+
+.nav-section-header.router-link-active {
+  background: rgba(34, 211, 238, 0.2);
+  color: white;
+  text-decoration: none;
 }
 
 .nav-icon {
@@ -268,6 +261,21 @@ export default {
 .submenu-item:hover {
   color: white;
   background: rgba(255, 255, 255, 0.1);
+  text-decoration: none;
+}
+
+.submenu-item:active,
+.submenu-item:focus {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+  text-decoration: none;
+  outline: none;
+}
+
+.submenu-item.router-link-active {
+  color: white;
+  background: rgba(34, 211, 238, 0.2);
+  text-decoration: none;
 }
 
 .submenu-item.active {
@@ -276,46 +284,74 @@ export default {
   font-weight: 500;
 }
 
-.sidebar-footer {
-  padding: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+/* Dark theme styles for sidebar */
+.dark-theme .sidebar-header {
+  padding: 32px 20px;
 }
 
-.user-controls {
+.dark-theme .logo-container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
-.control-btn {
-  width: 32px;
-  height: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
+.dark-theme .logo-text {
   color: white;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  transition: all 0.2s ease;
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: 0.5px;
 }
 
-.control-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+.dark-theme .brand-text {
+  color: #f8fafa;
 }
 
-.user-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
+.dark-theme .nav-section-header {
+  color: white;
+}
+
+.dark-theme .nav-section-header:hover {
   color: white;
   background: rgba(255, 255, 255, 0.1);
+  text-decoration: none;
+}
+
+.dark-theme .nav-section-header:active,
+.dark-theme .nav-section-header:focus {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+  text-decoration: none;
+  outline: none;
+}
+
+.dark-theme .nav-section-header.router-link-active {
+  color: white;
+  background: rgba(34, 211, 238, 0.2);
+  text-decoration: none;
+}
+
+.dark-theme .submenu-item {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.dark-theme .submenu-item:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+  text-decoration: none;
+}
+
+.dark-theme .submenu-item:active,
+.dark-theme .submenu-item:focus {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+  text-decoration: none;
+  outline: none;
+}
+
+.dark-theme .submenu-item.router-link-active {
+  color: white;
+  background: rgba(34, 211, 238, 0.2);
+  text-decoration: none;
 }
 </style>

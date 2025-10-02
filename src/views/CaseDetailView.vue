@@ -253,7 +253,6 @@ export default {
 
 <style scoped>
 .case-detail-view {
-  margin-left: 280px;
   padding: 32px 40px;
   min-height: 100vh;
   background-color: #f8fafc;
@@ -327,12 +326,12 @@ export default {
 }
 
 .edit-btn {
-  background: #3b82f6;
+  background: #22d3ee;
   color: white;
 }
 
 .edit-btn:hover {
-  background: #2563eb;
+  background: #0891b2;
 }
 
 .cases-btn {
@@ -425,12 +424,12 @@ export default {
 
 .status-badge.closed {
   background: rgba(16, 185, 129, 0.1);
-  color: #065f46;
+  color: #1e40af;
 }
 
 .priority-badge.low {
   background: rgba(16, 185, 129, 0.1);
-  color: #065f46;
+  color: #1e40af;
 }
 
 .priority-badge.medium {
@@ -501,7 +500,7 @@ export default {
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  background: #3b82f6;
+  background: #22d3ee;
   color: white;
   border-radius: 4px;
   text-decoration: none;
@@ -513,7 +512,7 @@ export default {
 }
 
 .view-link:hover {
-  background: #2563eb;
+  background: #0891b2;
 }
 
 .form-actions {
@@ -541,7 +540,7 @@ export default {
 }
 
 .save-btn {
-  background: #10b981;
+  background: #3b82f6;
   color: white;
 }
 
@@ -550,7 +549,7 @@ export default {
 }
 
 .save-btn:hover {
-  background: #059669;
+  background: #1e40af;
 }
 
 .timeline-section {
@@ -582,7 +581,7 @@ export default {
 .timeline-marker {
   width: 12px;
   height: 12px;
-  background: #3b82f6;
+  background: #22d3ee;
   border-radius: 50%;
   flex-shrink: 0;
   margin-top: 4px;

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 /* Draggable elements styles */
 .dragging,
@@ -9,16 +9,35 @@
   -ms-user-select: none;
 }
 
-.dragging * {
+/* Only disable pointer events during actual dragging, not for elements that should remain interactive */
+.dragging.widget-header {
+  cursor: grabbing;
+}
+
+.dragging.widget-header * {
   pointer-events: none;
+}
+
+/* Widget positioning constraints */
+.draggable-widget,
+.reports-widget,
+.live-chat-widget,
+.incoming-call-container {
+  position: fixed !important;
+}
+
+.draggable-widget.dragging,
+.reports-widget.dragging,
+.live-chat-widget.dragging {
+  z-index: 99999 !important;
 }
 
 /* variables de disseny corporatiu modern */
 :root {
   /* Colors corporatius principals */
-  --primary-blue: #1e3a8a;
-  --primary-blue-light: #3b82f6;
-  --primary-blue-dark: #1e40af;
+  --primary-blue: #0891b2;
+  --primary-blue-light: #22d3ee;
+  --primary-blue-dark: #0e7490;
   --secondary-gray: #64748b;
   --secondary-gray-light: #94a3b8;
   --secondary-gray-dark: #475569;
@@ -37,8 +56,8 @@
   --gray-900: #0f172a;
 
   /* Colors functionals */
-  --success: #10b981;
-  --success-light: #6ee7b7;
+  --success: #3b82f6;
+  --success-light: #1e40af;
   --warning: #f59e0b;
   --warning-light: #fcd34d;
   --error: #ef4444;
@@ -47,8 +66,18 @@
   --info-light: #67e8f9;
 
   /* Typography */
-  --font-sans: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+
+  /* Dark Theme Colors */
+  --dark-bg-primary: #0f172a;
+  --dark-bg-secondary: #1e293b;
+  --dark-bg-tertiary: #334155;
+  --dark-text-primary: #f8fafc;
+  --dark-text-secondary: #cbd5e1;
+  --dark-text-tertiary: #94a3b8;
+  --dark-border: #374151;
+  --dark-hover: #475569;
 
   /* Shadows corporatius */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -98,6 +127,7 @@ body {
   font-smooth: antialiased;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 /* Componentes corporatius base */
@@ -151,7 +181,7 @@ body {
 }
 
 .btn-success:hover {
-  background-color: #059669;
+  background-color: #1e40af;
 }
 
 .btn-danger {
@@ -332,7 +362,7 @@ body {
 
 .badge-success {
   background-color: var(--success-light);
-  color: #065f46;
+  color: #1e40af;
 }
 
 .badge-warning {
@@ -394,6 +424,115 @@ body {
 
 .animate-slide-in {
   animation: slideInRight 0.3s ease-out;
+}
+
+/* Dark Theme Styles */
+.dark-theme {
+  --gray-50: var(--dark-bg-primary);
+  --gray-100: var(--dark-bg-secondary);
+  --gray-200: var(--dark-bg-tertiary);
+  --gray-300: var(--dark-border);
+  --gray-400: var(--dark-text-tertiary);
+  --gray-500: var(--dark-text-secondary);
+  --gray-600: var(--dark-text-secondary);
+  --gray-700: var(--dark-text-primary);
+  --gray-800: var(--dark-text-primary);
+  --gray-900: var(--dark-text-primary);
+  --white: var(--dark-bg-secondary);
+
+  color-scheme: dark;
+}
+
+.dark-theme body {
+  background-color: var(--dark-bg-primary);
+  color: var(--dark-text-primary);
+}
+
+.dark-theme .sidebar {
+  background-color: var(--dark-bg-secondary);
+  border-color: var(--dark-border);
+}
+
+.dark-theme .main-content {
+  background-color: var(--dark-bg-primary);
+}
+
+.dark-theme .card {
+  background-color: var(--dark-bg-secondary);
+  border-color: var(--dark-border);
+}
+
+.dark-theme input, .dark-theme select, .dark-theme textarea {
+  background-color: var(--dark-bg-tertiary);
+  border-color: var(--dark-border);
+  color: var(--dark-text-primary);
+}
+
+.dark-theme button:hover {
+  background-color: var(--dark-hover);
+}
+
+/* Phone Widget Additional Styles */
+.phone-widget-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  z-index: 9998;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.phone-widget-overlay.visible {
+  opacity: 1;
+}
+
+/* Phone widget animations */
+.incoming-call-enter-active {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.incoming-call-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.incoming-call-enter-from {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.3);
+}
+
+.incoming-call-leave-to {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.3);
+}
+
+.incoming-call-enter-to,
+.incoming-call-leave-from {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Phone widget responsive adjustments */
+@media (max-width: 768px) {
+  .incoming-call-container .phone-frame {
+    width: 300px;
+    height: 600px;
+  }
+
+  .phone-widget-overlay {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .incoming-call-container .phone-frame {
+    width: 280px;
+    height: 580px;
+    margin: 0 auto;
+  }
 }
 
 /* Responsive design */

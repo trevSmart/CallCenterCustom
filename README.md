@@ -45,7 +45,7 @@ L'aplicació s'executarà a `http://localhost:3000`
 
 ### Credencials de prova
 - **Usuari**: `agent@xavibank.com`
-- **Contrasenya**: `password`
+- **Contrasenya**: `trompeta1`
 
 ## 📖 Com Ús Funciona
 

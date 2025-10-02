@@ -1,22 +1,37 @@
 <template>
   <div class="ninja-dashboard">
-    <!-- Left Sidebar -->
-    <NinjaSidebar />
-
     <!-- Main Content Area -->
     <div class="main-content">
       <!-- Top Header -->
       <header class="main-header">
-        <h1 class="header-title">XaviBank Call Center Dashboard</h1>
+        <h1 class="header-title">Dashboard</h1>
         <div class="header-actions">
-          <button
-            @click="toggleSimulationMode"
-            class="simulation-btn"
-            :class="{ active: callsStore.isSimulationMode }"
-          >
-            📞 {{ callsStore.isSimulationMode ? 'Simulation Mode: ON' : 'Simulation Mode: OFF' }}
+          <button class="theme-toggle-btn" @click="toggleTheme" :title="isDarkMode ? 'Change to light mode' : 'Change to dark mode'">
+            <font-awesome-icon :icon="isDarkMode ? 'sun' : 'moon'" />
           </button>
-          <button @click="logout" class="logout-btn">Logout</button>
+          <div class="user-profile" @click="logout">
+            <div class="user-avatar">
+              <img
+                src="/images/admin-avatar.jpg"
+                alt="Admin"
+                class="avatar-image"
+                @error="handleImageError"
+              />
+              <!-- Fallback icon if image fails to load -->
+              <font-awesome-icon
+                icon="user-circle"
+                class="avatar-fallback"
+                style="display: none;"
+              />
+            </div>
+            <div class="user-info">
+              <div class="user-name">Admin User</div>
+              <div class="user-role">Call Center Agent</div>
+            </div>
+            <button class="logout-icon-btn" @click="logout" title="Logout">
+              <font-awesome-icon icon="sign-out-alt" />
+            </button>
+          </div>
         </div>
       </header>
 
@@ -24,83 +39,63 @@
       <div class="chat-interface">
         <ChatList @openChat="handleOpenChat" />
 
-        <!-- Phone Widget (Floating) -->
-        <div class="phone-widget-container">
-          <div class="phone-card">
-            <h3 class="phone-title">📞 Phone Controls</h3>
-
-            <div class="current-call" v-if="currentCall">
-              <div class="call-info">
-                <strong>Calling:</strong> {{ currentCall.phoneNumber }}
-                <div class="call-duration">⏱️ {{ formatDuration(currentCall.duration) }}</div>
-              </div>
-              <div class="call-actions">
-                <select v-model="callOutcome" class="outcome-select">
-                  <option value="successful">Successful</option>
-                  <option value="no_answer">No Answer</option>
-                  <option value="busy">Busy</option>
-                  <option value="voice_mail">Voicemail</option>
-                  <option value="disconnected">Disconnected</option>
-                </select>
-                <textarea
-                  v-model="callNotes"
-                  placeholder="Call notes..."
-                  class="call-notes"
-                ></textarea>
-                <button @click="endCall" class="end-call-btn">📞 End Call</button>
-              </div>
+        <!-- Phone Dialer Widget (Floating) -->
+        <div
+          v-if="showPhoneWidget"
+          class="phone-dialer-card draggable-widget"
+          ref="phoneWidgetRef"
+          :style="{
+            position: 'fixed',
+            left: (phoneWidgetPosition?.x || 320) + 'px',
+            top: (phoneWidgetPosition?.y || 140) + 'px'
+          }"
+          @mousedown="startPhoneWidgetDrag"
+          @touchstart="startPhoneWidgetDrag"
+        >
+          <div class="widget-header">
+            <div class="drag-indicator">
+              <font-awesome-icon icon="grip-vertical" />
             </div>
-
-            <div class="make-call" v-else>
-              <input
-                v-model="phoneNumber"
-                type="tel"
-                placeholder="Enter phone number"
-                class="phone-input"
-                pattern="[0-9+\s\-\(\)]+"
-              />
-
-              <div class="contact-search" v-if="phoneNumber">
-                <p>🔍 Search contact:</p>
-                <select v-model="selectedContact" class="contact-select">
-                  <option value="">-- Select contact --</option>
-                  <option
-                    v-for="contact in searchContacts"
-                    :key="contact.id"
-                    :value="contact"
-                  >
-                    {{ contact.firstName }} {{ contact.lastName }} - {{ contact.phone }}
-                  </option>
-                </select>
-              </div>
-
-              <button @click="makeCall" class="make-call-btn">📞 Make Call</button>
+            <h3 class="phone-title">
+              <font-awesome-icon icon="phone" /> Phone Dialer
+            </h3>
+            <div class="widget-controls">
+              <button class="minimize-icon" @click-stop="closePhoneWidget">
+                <font-awesome-icon icon="minimize" />
+              </button>
             </div>
           </div>
 
-          <!-- Recent Calls Widget -->
-          <div class="recent-calls-card">
-            <h3 class="calls-title">📋 Recent Calls</h3>
-            <div class="calls-list">
-              <div
-                v-for="call in recentCalls.slice(0, 5)"
-                :key="call.id"
-                class="call-item"
-              >
-                <div class="call-details">
-                  <div class="call-number">{{ call.phoneNumber }}</div>
-                  <div class="call-time">{{ formatDate(call.startTime) }}</div>
-                  <div class="call-status" :class="call.status">{{ call.status }}</div>
-                </div>
-                <button @click="openCaseFromCall(call)" class="open-case-btn">
-                  📝 View Case
-                </button>
-              </div>
-            </div>
+          <!-- Phone Dialer Component -->
+          <div class="widget-content">
+            <PhoneDialer
+              @call-made="handleDialerCall"
+              @contact-selected="handleContactSelected"
+            />
           </div>
+
+          <!-- Simulate incoming call button -->
+          <div class="simulate-section">
+            <button @click="simulateIncomingCall" class="simulate-call-btn">
+              <font-awesome-icon icon="phone-volume" /> Simulate Incoming Call
+            </button>
+          </div>
+
+          <!-- Condensed call status (only when active) -->
+          <div class="call-status" v-if="currentCall">
+            <div class="call-info-compact">
+              <span>Calling: {{ currentCall.phoneNumber }}</span>
+              <span class="call-duration">{{ formatDuration(currentCall.duration) }}</span>
+            </div>
+            <button @click="endCall" class="end-call-btn">
+              <font-awesome-icon icon="phone" /> End Call
+            </button>
+          </div>
+        </div>
 
           <!-- Dashboard Stats Widget -->
           <div
+            v-if="showStatsWidget"
             class="stats-card draggable-widget"
             ref="statsWidgetRef"
             :style="{
@@ -111,10 +106,16 @@
             @mousedown="startStatsDrag"
             @touchstart="startStatsDrag"
           >
-            <div class="draggable-header-widget">
+            <div class="widget-header">
+              <div class="drag-indicator">
+                <font-awesome-icon icon="grip-vertical" />
+              </div>
               <h3 class="stats-title"><font-awesome-icon icon="chart-line" /> Today's Summary</h3>
-              <div class="drag-handle-widget">
-                <font-awesome-icon icon="grip-vertical" class="drag-icon" />
+              <div class="widget-controls">
+                <router-link to="/dashboard" class="view-all-link">
+                  <font-awesome-icon icon="external-link-alt" />
+                </router-link>
+                <button class="close-btn" @click.stop="closeStatsWidget"><font-awesome-icon icon="xmark" /></button>
               </div>
             </div>
             <div class="stats-grid">
@@ -132,23 +133,10 @@
               </div>
             </div>
           </div>
-        </div>
 
         <!-- Reports Widget -->
-        <div class="widget-column">
-          <div
-            class="draggable-widget"
-            :class="{ dragging: reportsWidgetDraggable?.isDragging }"
-            :style="{
-              position: 'fixed',
-              top: (reportsWidgetPosition?.y || 140) + 'px',
-              left: (reportsWidgetPosition?.x || 620) + 'px',
-            }"
-            @mousedown="startReportsDrag"
-            @touchstart="startReportsDrag"
-          >
-            <ReportsWidget />
-          </div>
+        <div class="widget-column" v-if="showReportsWidget">
+          <ReportsWidget @closeWidget="closeReportsWidget" />
         </div>
       </div>
     </div>
@@ -157,6 +145,7 @@
     <LiveChatWidget
       :selectedChat="selectedChat"
       @sendMessage="handleSendMessage"
+      @closeWidget="closeChatWidget"
     />
   </div>
 </template>
@@ -167,50 +156,50 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth.js'
 import { useCallsStore } from '../stores/calls.js'
 import { useBankingStore } from '../stores/banking.js'
-import NinjaSidebar from '../components/NinjaSidebar.vue'
 import ChatList from '../components/ChatList.vue'
 import LiveChatWidget from '../components/LiveChatWidget.vue'
 import ReportsWidget from '../components/ReportsWidget.vue'
+import PhoneDialer from '../components/PhoneDialer.vue'
 import { useDraggableWidget } from '../composables/useDraggable.js'
+import { useTheme } from '../composables/useTheme.js'
 
 let callTimer = null
 
 export default {
   name: 'DashboardView',
   components: {
-    NinjaSidebar,
     ChatList,
     LiveChatWidget,
-    ReportsWidget
+    ReportsWidget,
+    PhoneDialer
   },
   setup() {
     const router = useRouter()
     const authStore = useAuthStore()
     const callsStore = useCallsStore()
     const bankingStoreInstance = useBankingStore()
+    const { isDarkMode, toggleTheme } = useTheme()
 
     const selectedChat = ref(null)
+    const showReportsWidget = ref(true)
+    const showStatsWidget = ref(true)
+    const showPhoneWidget = ref(true)
 
     // Draggable widgets setup
     const phoneWidgetDraggable = useDraggableWidget('phone-widget', { x: 320, y: 140 })
     const recentCallsWidgetDraggable = useDraggableWidget('recent-calls-widget', { x: 320, y: 500 })
     const statsWidgetDraggable = useDraggableWidget('stats-widget', { x: 320, y: 800 })
-    const reportsWidgetDraggable = useDraggableWidget('reports-widget', { x: 620, y: 140 })
-
     const phoneWidgetPosition = phoneWidgetDraggable.position
     const recentCallsWidgetPosition = recentCallsWidgetDraggable.position
     const statsWidgetPosition = statsWidgetDraggable.position
-    const reportsWidgetPosition = reportsWidgetDraggable.position
 
     const phoneWidgetRef = phoneWidgetDraggable.elementRef
     const recentCallsWidgetRef = recentCallsWidgetDraggable.elementRef
     const statsWidgetRef = statsWidgetDraggable.elementRef
-    const reportsWidgetRef = reportsWidgetDraggable.elementRef
 
     const startPhoneWidgetDrag = phoneWidgetDraggable.startDrag
     const startRecentCallsDrag = recentCallsWidgetDraggable.startDrag
     const startStatsDrag = statsWidgetDraggable.startDrag
-    const startReportsDrag = reportsWidgetDraggable.startDrag
 
     const phoneNumber = ref('')
     const selectedContact = ref(null)
@@ -264,6 +253,10 @@ export default {
       selectedContact.value = null
     }
 
+    const simulateIncomingCall = () => {
+      callsStore.simulateIncomingCall()
+    }
+
     const endCall = () => {
       callsStore.endCall(callOutcome.value, callNotes.value)
 
@@ -293,14 +286,6 @@ export default {
       router.push({ name: 'Cases' })
     }
 
-    const toggleSimulationMode = () => {
-      callsStore.toggleSimulationMode()
-
-      if (!callsStore.isSimulationMode && callTimer) {
-        clearInterval(callTimer)
-        callTimer = null
-      }
-    }
 
     const logout = () => {
       authStore.logout()
@@ -329,6 +314,48 @@ export default {
       // Here you would integrate with your chat backend
     }
 
+    const closeChatWidget = () => {
+      selectedChat.value = null
+    }
+
+    const closeReportsWidget = () => {
+      showReportsWidget.value = false
+    }
+
+    const closeStatsWidget = () => {
+      showStatsWidget.value = false
+    }
+
+    const closePhoneWidget = () => {
+      showPhoneWidget.value = false
+    }
+
+    // Handle image loading errors
+    const handleImageError = (event) => {
+      event.target.style.display = 'none'
+      const fallback = event.target.nextElementSibling
+      if (fallback) {
+        fallback.style.display = 'block'
+      }
+    }
+
+    // Phone Dialer handlers
+    const handleDialerCall = ({ number, contact }) => {
+      // Start call using the dialer
+      callsStore.startCall(number, contact)
+
+      // Si està en mode simulació, simular el temporizador
+      if (callsStore.isSimulationMode) {
+        callTimer = setInterval(() => {
+          callsStore.currentCall.duration++
+        }, 1000)
+      }
+    }
+
+    const handleContactSelected = (contact) => {
+      console.log('Contact selected:', contact)
+    }
+
     // Cleanup on component unmount
     onUnmounted(() => {
       if (callTimer) {
@@ -347,6 +374,9 @@ export default {
       callNotes,
       callOutcome,
       selectedChat,
+      showReportsWidget,
+      showStatsWidget,
+      showPhoneWidget,
       currentCall,
       recentCalls,
       todaysCalls,
@@ -354,12 +384,18 @@ export default {
       activeOpportunities,
       searchContacts,
       makeCall,
+      simulateIncomingCall,
       endCall,
       openCaseFromCall,
-      toggleSimulationMode,
       logout,
       handleOpenChat,
       handleSendMessage,
+      closeChatWidget,
+      closeReportsWidget,
+      closeStatsWidget,
+      closePhoneWidget,
+      isDarkMode,
+      toggleTheme,
       formatDuration,
       formatDate,
       phoneWidgetPosition,
@@ -370,7 +406,10 @@ export default {
       statsWidgetRef,
       startPhoneWidgetDrag,
       startRecentCallsDrag,
-      startStatsDrag
+      startStatsDrag,
+      handleImageError,
+      handleDialerCall,
+      handleContactSelected
     }
   }
 }
@@ -381,12 +420,11 @@ export default {
   display: flex;
   min-height: 100vh;
   background: #f9fafb;
-  font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .main-content {
   flex: 1;
-  margin-left: 280px;
   background: white;
   min-height: 100vh;
 }
@@ -414,41 +452,84 @@ export default {
   align-items: center;
 }
 
-.simulation-btn {
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   padding: 8px 16px;
-  border: 1px solid #3b82f6;
   background: white;
-  color: #3b82f6;
-  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
   cursor: pointer;
-  font-weight: 500;
-  font-size: 14px;
   transition: all 0.2s ease;
 }
 
-.simulation-btn:hover {
-  background: #f1f5f9;
+.user-profile:hover {
+  background: #f9fafb;
+  border-color: #22d3ee;
+  box-shadow: 0 2px 8px rgba(34, 211, 238, 0.1);
 }
 
-.simulation-btn.active {
-  background: #3b82f6;
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0e7490, #22d3ee);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: white;
+  font-size: 18px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border: 2px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.logout-btn {
-  padding: 8px 16px;
-  background: #ef4444;
-  color: white;
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.user-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #1f2937;
+  line-height: 1.2;
+}
+
+.user-role {
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 1.2;
+}
+
+.logout-icon-btn {
+  width: 32px;
+  height: 32px;
   border: none;
-  border-radius: 8px;
+  background: transparent;
+  color: #6b7280;
+  border-radius: 6px;
   cursor: pointer;
-  font-weight: 500;
-  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: all 0.2s ease;
+  flex-shrink: 0;
 }
 
-.logout-btn:hover {
-  background: #dc2626;
+.logout-icon-btn:hover {
+  background: #fee2e2;
+  color: #dc2626;
 }
 
 .chat-interface {
@@ -460,10 +541,10 @@ export default {
   width: 280px;
   background: white;
   border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 2px 3px -1px rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e5e7eb;
-  z-index: 10;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: none;
+  z-index: 9998;
   transition: box-shadow 0.2s ease;
   cursor: default;
 }
@@ -473,9 +554,7 @@ export default {
   cursor: grabbing;
 }
 
-.phone-card,
-.recent-calls-card,
-.stats-card {
+.recent-calls-card {
   /* Estilos se mantienen igual que antes */
 }
 
@@ -507,7 +586,14 @@ export default {
   pointer-events: none;
 }
 
-.phone-title,
+.phone-title {
+  margin: 0;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  flex: 1;
+}
+
 .calls-title,
 .stats-title {
   margin: 0;
@@ -520,7 +606,7 @@ export default {
   background: #f9fafb;
   padding: 16px;
   border-radius: 8px;
-  border-left: 4px solid #10b981;
+  border-left: 4px solid #3b82f6;
   margin-bottom: 16px;
 }
 
@@ -556,7 +642,7 @@ export default {
 .outcome-select:focus,
 .call-notes:focus {
   outline: none;
-  border-color: #3b82f6;
+  border-color: #22d3ee;
   box-shadow: 0 0 0 2px rgba(59, 130, 244, 0.06);
 }
 
@@ -601,7 +687,7 @@ export default {
 
 .phone-input:focus {
   outline: none;
-  border-color: #3b82f6;
+  border-color: #22d3ee;
   box-shadow: 0 0 0 2px rgba(59, 130, 244, 0.06);
 }
 
@@ -631,12 +717,12 @@ export default {
 
 .contact-select:focus {
   outline: none;
-  border-color: #3b82f6;
+  border-color: #22d3ee;
   box-shadow: 0 0 0 2px rgba(59, 130, 244, 0.06);
 }
 
 .make-call-btn {
-  background: #10b981;
+  background: #3b82f6;
   color: white;
   border: none;
   padding: 12px 16px;
@@ -649,7 +735,26 @@ export default {
 }
 
 .make-call-btn:hover {
-  background: #059669;
+  background: #1e40af;
+}
+
+.test-incoming-call-btn {
+  background: #f97316;
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  transition: background-color 0.2s ease;
+  margin-top: 8px;
+  width: 100%;
+}
+
+.test-incoming-call-btn:hover {
+  background: #ea580c;
 }
 
 .calls-list {
@@ -704,7 +809,7 @@ export default {
 
 .call-status.completed {
   background: rgba(16, 185, 129, 0.1);
-  color: #065f46;
+  color: #1e40af;
 }
 
 .call-status.active {
@@ -713,7 +818,7 @@ export default {
 }
 
 .open-case-btn {
-  background: #3b82f6;
+  background: #22d3ee;
   color: white;
   border: none;
   padding: 6px 12px;
@@ -725,13 +830,14 @@ export default {
 }
 
 .open-case-btn:hover {
-  background: #2563eb;
+  background: #0891b2;
 }
 
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  gap: 8px;
+  padding-top: 4px;
 }
 
 .stat-item {
@@ -741,7 +847,7 @@ export default {
 .stat-number {
   font-size: 20px;
   font-weight: 700;
-  color: #3b82f6;
+  color: #22d3ee;
   margin-bottom: 4px;
 }
 
@@ -749,5 +855,177 @@ export default {
   color: #6b7280;
   font-size: 12px;
   font-weight: 500;
+}
+
+/* Phone Dialer Widget Styles */
+.phone-dialer-card {
+  background: transparent !important;
+  border-radius: 12px;
+  overflow: visible;
+  width: 400px;
+}
+
+.widget-content {
+  padding: 0;
+}
+
+.phone-dialer-card .phone-dialer {
+  box-shadow: none;
+  margin: 0;
+  max-width: none;
+}
+
+.simulate-section {
+  padding: 12px 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+.simulate-call-btn {
+  background: #f97316;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  transition: background-color 0.2s ease;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.simulate-call-btn:hover {
+  background: #ea580c;
+}
+
+.phone-dialer-card .phone-title {
+  margin: 0;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  flex: 1;
+}
+
+/* Stats Widget Header Styles */
+.draggable-widget .widget-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: none;
+  background: #14b8a6; /* Teal color like in image */
+  color: white;
+  border-radius: 12px 12px 0 0;
+  cursor: move;
+  user-select: none;
+  flex-shrink: 0;
+  min-height: 44px;
+}
+
+.draggable-widget .drag-indicator {
+  color: white;
+  font-size: 16px;
+  margin-right: 12px;
+}
+
+.grid-icon {
+  font-family: monospace;
+  font-size: 14px;
+  line-height: 1;
+  letter-spacing: 2px;
+}
+
+.draggable-widget .widget-header:hover .drag-indicator {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.draggable-widget .stats-title {
+  margin: 0;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  flex: 1;
+}
+
+.draggable-widget .view-all-link {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 12px;
+  transition: color 0.2s ease;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.draggable-widget .view-all-link:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.draggable-widget .widget-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.draggable-widget .close-btn {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.draggable-widget .close-btn:hover {
+  background: rgba(239, 68, 68, 0.3);
+  color: white;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+/* Theme Toggle Button */
+.theme-toggle-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  margin-right: 12px;
+}
+
+.theme-toggle-btn:hover {
+  background: rgba(34, 211, 238, 0.1);
+  color: #22d3ee;
+}
+
+.theme-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+.dark-theme .theme-toggle-btn {
+  color: #cbd5e1;
+}
+
+.dark-theme .theme-toggle-btn:hover {
+  background: rgba(34, 211, 238, 0.2);
+  color: #22d3ee;
 }
 </style>

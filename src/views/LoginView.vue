@@ -67,7 +67,7 @@ export default {
     const authStore = useAuthStore()
 
     const username = ref('agent@xavibank.com')
-    const password = ref('password')
+    const password = ref('trompeta1')
 
 
     const isLoading = ref(false)

@@ -9,7 +9,7 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async login(username, password) {
       // Simulació d'autenticació
-      if (username === 'agent@xavibank.com' && password === 'password') {
+      if (username === 'agent@xavibank.com' && password === 'trompeta1') {
         this.user = {
           id: 1,
           name: 'Agent Call Center',

@@ -281,7 +281,6 @@ export default {
 
 <style scoped>
 .account-detail-view {
-  margin-left: 280px;
   padding: 32px 40px;
   min-height: 100vh;
   background-color: #f8fafc;
@@ -494,7 +493,7 @@ export default {
 }
 
 .save-btn {
-  background: #10b981;
+  background: #3b82f6;
   color: white;
 }
 
@@ -503,7 +502,7 @@ export default {
 }
 
 .save-btn:hover {
-  background: #059669;
+  background: #1e40af;
 }
 
 .related-section {
@@ -605,7 +604,7 @@ export default {
 
 .case-status.closed {
   background: rgba(16, 185, 129, 0.1);
-  color: #065f46;
+  color: #1e40af;
 }
 
 .opportunity-stage.prospecting, .opportunity-stage.qualification {
@@ -620,7 +619,7 @@ export default {
 
 .opportunity-stage.closed-won {
   background: rgba(16, 185, 129, 0.1);
-  color: #065f46;
+  color: #1e40af;
 }
 
 .opportunity-stage.closed-lost {

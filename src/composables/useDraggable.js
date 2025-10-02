@@ -8,6 +8,11 @@ export function useDraggable(initialPosition = { x: 0, y: 0 }) {
   const originalPosition = reactive({ ...initialPosition })
 
   const startDrag = (event) => {
+    // Only start drag if clicking on the header or drag indicator
+    if (!event.target.closest('.widget-header') && !event.target.closest('.drag-indicator')) {
+      return
+    }
+
     event.preventDefault()
     isDragging.value = true
     dragStart.value = {
@@ -15,12 +20,18 @@ export function useDraggable(initialPosition = { x: 0, y: 0 }) {
       y: event.clientY - position.y
     }
 
-    // Add dragging class for visual feedback
-    if (elementRef.value) {
-      elementRef.value.classList.add('dragging')
-      document.body.style.cursor = '.dragging'
-      document.body.classList.add('no-select')
-    }
+      // Add dragging class for visual feedback
+      if (elementRef.value) {
+        elementRef.value.classList.add('dragging')
+        // Ensure maximum z-index during drag
+        elementRef.value.style.zIndex = '99999'
+        // Don't apply cursor to entire body, just the dragging element
+        elementRef.value.style.cursor = 'grabbing'
+        document.body.classList.add('no-select')
+
+        // Prevent text selection during drag
+        event.preventDefault()
+      }
   }
 
   const onDrag = (event) => {
@@ -35,8 +46,9 @@ export function useDraggable(initialPosition = { x: 0, y: 0 }) {
       const maxX = window.innerWidth - rect.width
       const maxY = window.innerHeight - rect.height
 
-      position.x = Math.max(0, Math.min(position.x, maxX))
-      position.y = Math.max(0, Math.min(position.y, maxY))
+      // Ensure widgets can't go above the viewport
+      position.x = Math.max(10, Math.min(position.x, maxX - 10))
+      position.y = Math.max(10, Math.min(position.y, maxY - 10))
     }
   }
 
@@ -45,7 +57,10 @@ export function useDraggable(initialPosition = { x: 0, y: 0 }) {
 
     if (elementRef.value) {
       elementRef.value.classList.remove('dragging')
-      document.body.style.cursor = ''
+      // Reset z-index back to original
+      elementRef.value.style.zIndex = ''
+      // Reset cursor for the element
+      elementRef.value.style.cursor = ''
       document.body.classList.remove('no-select')
     }
   }
