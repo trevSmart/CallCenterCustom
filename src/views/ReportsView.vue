@@ -459,7 +459,6 @@ export default {
 <style scoped>
 .reports-view {
   padding: 32px 40px;
-  margin-left: 280px;
   min-height: 100vh;
   background-color: #f8fafc;
 }

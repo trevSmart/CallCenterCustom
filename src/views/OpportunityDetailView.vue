@@ -357,7 +357,6 @@ export default {
 
 <style scoped>
 .opportunity-detail-view {
-  margin-left: 280px;
   padding: 32px 40px;
   min-height: 100vh;
   background-color: #f8fafc;
@@ -391,29 +390,30 @@ export default {
   font-size: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
+}
 
-    .back-btn:hover {
-      background: #e5e7eb;
-    }
+.back-btn:hover {
+  background: #e5e7eb;
+}
 
-    .opportunity-title {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+.opportunity-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
-    .opportunity-title h1 {
-      margin: 0;
-      font-size: 24px;
-      font-weight: 600;
-      color: #1f2937;
-    }
+.opportunity-title h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1f2937;
+}
 
-    .header-right {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
+.header-right {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
 
     .edit-btn, .opportunities-btn {
       padding: 10px 16px;

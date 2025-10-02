@@ -253,7 +253,6 @@ export default {
 
 <style scoped>
 .case-detail-view {
-  margin-left: 280px;
   padding: 32px 40px;
   min-height: 100vh;
   background-color: #f8fafc;

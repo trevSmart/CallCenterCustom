@@ -1,9 +1,5 @@
 <template>
   <div class="ninja-dashboard">
-    <!-- Left Sidebar -->
-    <NinjaSidebar />
-
-    <!-- Main Content Area -->
     <div class="main-content">
       <!-- Top Header -->
       <header class="main-header">
@@ -167,7 +163,6 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth.js'
 import { useCallsStore } from '../stores/calls.js'
 import { useBankingStore } from '../stores/banking.js'
-import NinjaSidebar from '../components/NinjaSidebar.vue'
 import ChatList from '../components/ChatList.vue'
 import LiveChatWidget from '../components/LiveChatWidget.vue'
 import ReportsWidget from '../components/ReportsWidget.vue'
@@ -178,7 +173,6 @@ let callTimer = null
 export default {
   name: 'DashboardView',
   components: {
-    NinjaSidebar,
     ChatList,
     LiveChatWidget,
     ReportsWidget
@@ -378,7 +372,6 @@ export default {
 
 <style scoped>
 .ninja-dashboard {
-  display: flex;
   min-height: 100vh;
   background: #f9fafb;
   font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -386,7 +379,6 @@ export default {
 
 .main-content {
   flex: 1;
-  margin-left: 280px;
   background: white;
   min-height: 100vh;
 }
